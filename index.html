@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pluszowa panda z animacją łap i sercami</title>
+<style>
+  body {
+    margin: 0;
+    background: linear-gradient(180deg, #0b0f14, #16222a);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Manrope', sans-serif;
+    color: #57a6ff;
+  }
+  #stage {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: visible;
+  }
+  #panda {
+    position: absolute;
+    width: 60px; /* około 4 cm na monitorze (przy 96dpi) */
+    height: 76px; /* proporcjonalnie */
+    cursor: pointer;
+    transform-origin: 50% 85%;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+    user-select: none;
+    will-change: transform, left, top;
+  }
+  #panda svg {
+    width: 100%;
+    height: 100%;
+  }
+  /* Animacja delikatnego chodzenia łap (tylko dolne łapy) */
+  .legL, .legR {
+    transform-origin: 50% 10%;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-duration: 1.5s;
+  }
+  .legL {
+    animation-name: legLeftWalk;
+  }
+  .legR {
+    animation-name: legRightWalk;
+  }
+  @keyframes legLeftWalk {
+    0%, 100% { transform: rotate(5deg) translateY(0); }
+    50% { transform: rotate(-5deg) translateY(2px); }
+  }
+  @keyframes legRightWalk {
+    0%, 100% { transform: rotate(-5deg) translateY(2px); }
+    50% { transform: rotate(5deg) translateY(0); }
+  }
+  /* Tułów lekko buja */
+  .bodyGroup {
+    animation: bodyBob 1.5s ease-in-out infinite;
+    transform-origin: 50% 85%;
+  }
+  @keyframes bodyBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(2px); }
+  }
+  /* Napis "Kocham Cię ;*" */
+  #loveText {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    font-weight: 700;
+    color: #ff5c8d;
+    text-shadow: 0 0 10px #ff5c8dcc;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    user-select: none;
+    pointer-events: none;
+    z-index: 1000;
+    white-space: nowrap;
+  }
+  #loveText.visible {
+    opacity: 1;
+  }
+  /* Serduszka */
+  .heart {
+    position: fixed;
+    width: 16px;
+    height: 16px;
+    background: #ff5c8d;
+    clip-path: polygon(
+      50% 0%,
+      61% 10%,
+      70% 20%,
+      80% 35%,
+      80% 55%,
+      70% 70%,
+      50% 90%,
+      30% 70%,
+      20% 55%,
+      20% 35%,
+      30% 20%,
+      39% 10%
+    );
+    opacity: 0.9;
+    pointer-events: none;
+    animation: floatUp 2.5s forwards ease-out;
+    filter: drop-shadow(0 0 2px #ff5c8d);
+  }
+  @keyframes floatUp {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 0.9;
+    }
+    100% {
+      transform: translateY(-120px) scale(1.4);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+<body>
+  <div id="stage" aria-label="Animacja chodzącej pandy" role="img">
+    <div id="panda" tabindex="0" role="button" aria-pressed="false" aria-label="Kliknij pandę, aby powiedziała Kocham Cię">
+      <svg viewBox="0 0 260 340" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" >
+        <defs>
+          <radialGradient id="eyeBlue" cx="35%" cy="35%" r="70%">
+            <stop offset="0" stop-color="rgba(140,200,255,1)"/>
+            <stop offset=".55" stop-color="rgba(87,166,255,1)"/>
+            <stop offset="1" stop-color="rgba(28,86,175,1)"/>
+          </radialGradient>
+          <radialGradient id="furWhite" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="#fff" />
+            <stop offset="100%" stop-color="#dcdcdc" />
+          </radialGradient>
+          <radialGradient id="furBlack" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="#222" />
+            <stop offset="100%" stop-color="#000" />
+          </radialGradient>
+          <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="rgba(0,0,0,0.3)" />
+          </filter>
+        </defs>
+
+        <g filter="url(#softShadow)" class="bodyGroup">
+          <!-- Głowa -->
+          <ellipse cx="130" cy="120" rx="90" ry="90" fill="url(#furWhite)" />
+          <!-- Łaty wokół oczu -->
+          <ellipse cx="90" cy="120" rx="42" ry="55" fill="url(#furBlack)" />
+          <ellipse cx="170" cy="120" rx="42" ry="55" fill="url(#furBlack)" />
+          <!-- Oczy niebieskie -->
+          <circle cx="90" cy="120" r="22" fill="url(#eyeBlue)" />
+          <circle cx="170" cy="120" r="22" fill="url(#eyeBlue)" />
+          <circle cx="90" cy="120" r="12" fill="#000" />
+          <circle cx="170" cy="120" r="12" fill="#000" />
+          <circle cx="90" cy="120" r="6" fill="#fff" opacity="0.8" />
+          <circle cx="170" cy="120" r="6" fill="#fff" opacity="0.8" />
+          <!-- Nos i pyszczek -->
+          <ellipse cx="130" cy="190" rx="50" ry="40" fill="url(#furWhite)" />
+          <ellipse cx="130" cy="190" rx="35" ry="25" fill="#222" />
+          <path d="M110 195 Q130 220 150 195" stroke="#fff" stroke-width="3" fill="none" />
+          <!-- Uszy -->
+          <ellipse cx="50" cy="70" rx="30" ry="40" fill="url(#furBlack)" />
+          <ellipse cx="210" cy="70" rx="30" ry="40" fill="url(#furBlack)" />
+          <ellipse cx="50" cy="70" rx="20" ry="30" fill="url(#furWhite)" />
+          <ellipse cx="210" cy="70" rx="20" ry="30" fill="url(#furWhite)" />
+          <!-- Tułów -->
+          <ellipse cx="130" cy="260" rx="90" ry="110" fill="url(#furWhite)" />
+          <ellipse cx="130" cy="260" rx="70" ry="90" fill="url(#furBlack)" />
+          <ellipse cx="130" cy="260" rx="50" ry="70" fill="url(#furWhite)" />
+          <!-- Ręce -->
+          <ellipse class="armL" cx="60" cy="260" rx="30" ry="70" fill="url(#furBlack)" />
+          <ellipse class="armR" cx="200" cy="260" rx="30" ry="70" fill="url(#furBlack)" />
+          <!-- Nogi -->
+          <ellipse class="legL" cx="90" cy="340" rx="40" ry="60" fill="url(#furBlack)" />
+          <ellipse class="legR" cx="170" cy="340" rx="40" ry="60" fill="url(#furBlack)" />
+        </g>
+      </svg>
+    </div>
+    <div id="loveText" aria-live="polite" role="alert">Kocham Cię ;*</div>
+  </div>
+
+<script>
+  const panda = document.getElementById('panda');
+  const loveText = document.getElementById('loveText');
+  const stage = document.getElementById('stage');
+
+  let isShowingLove = false;
+
+  // Aktualna pozycja pandy
+  let pos = { x: 100, y: 100 };
+  // Cel do którego panda idzie
+  let target = { x: 100, y: 100 };
+  // Prędkość pandy (piksele na klatkę)
+  const speed = 1.5;
+
+  // Ustaw początkową pozycję pandy
+  function setPandaPosition(x, y) {
+    pos.x = x;
+    pos.y = y;
+    panda.style.left = `${x}px`;
+    panda.style.top = `${y}px`;
+  }
+
+  // Losuj nowy cel w obrębie widocznej sceny
+  function chooseNewTarget() {
+    const paddingX = panda.offsetWidth;
+    const paddingY = panda.offsetHeight;
+    const maxX = window.innerWidth - paddingX;
+    const maxY = window.innerHeight - paddingY;
+    target.x = Math.random() * maxX;
+    target.y = Math.random() * maxY;
+  }
+
+  // Obróć pandę w kierunku ruchu (prawo lub lewo)
+  function updateDirection() {
+    const dx = target.x - pos.x;
+    if (dx >= 0) {
+      panda.style.transform = `scaleX(1)`;
+    } else {
+      panda.style.transform = `scaleX(-1)`;
+    }
+  }
+
+  // Animacja chodzenia nóg i rąk (dodajemy klasy)
+  function startWalkingAnimation() {
+    panda.querySelector('.bodyGroup').style.animationPlayState = 'running';
+  }
+  function stopWalkingAnimation() {
+    panda.querySelector('.bodyGroup').style.animationPlayState = 'paused';
+  }
+
+  // Tworzenie serduszek
+  function createHeart(x, y) {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.style.left = `${x}px`;
+    heart.style.top = `${y}px`;
+    document.body.appendChild(heart);
+    setTimeout(() => {
+      heart.remove();
+    }, 2500);
+  }
+
+  // Funkcja animująca ruch pandy
+  function animate() {
+    if (isShowingLove) {
+      requestAnimationFrame(animate);
+      return; // zatrzymaj ruch podczas pokazywania napisu
+    }
+
+    const dx = target.x - pos.x;
+    const dy = target.y - pos.y;
+    const dist = Math.hypot(dx, dy);
+
+    if (dist < speed) {
+      // Dotarliśmy do celu, wybierz nowy
+      chooseNewTarget();
+      updateDirection();
+    } else {
+      // Idź w kierunku celu
+      const vx = (dx / dist) * speed;
+      const vy = (dy / dist) * speed;
+      setPandaPosition(pos.x + vx, pos.y + vy);
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  // Obsługa kliknięcia pandy
+  panda.addEventListener('click', (e) => {
+    if (isShowingLove) return;
+    isShowingLove = true;
+
+    stopWalkingAnimation();
+
+    // Pokaż napis
+    loveText.classList.add('visible');
+
+    // Wygeneruj kilka serduszek od pandy (w okolicy)
+    const rect = panda.getBoundingClientRect();
+    for (let i = 0; i < 12; i++) {
+      const offsetX = rect.left + rect.width / 2 + (Math.random() - 0.5) * 40;
+      const offsetY = rect.top + rect.height / 2 + (Math.random() - 0.5) * 40;
+      setTimeout(() => createHeart(offsetX, offsetY), i * 150);
+    }
+
+    // Po 4 sekundach ukryj napis i wznow chodzenie
+    setTimeout(() => {
+      loveText.classList.remove('visible');
+      isShowingLove = false;
+      updateDirection();
+      startWalkingAnimation();
+    }, 4000);
+  });
+
+  // Obsługa klawiatury (Enter, Space)
+  panda.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      panda.click();
+    }
+  });
+
+  // Inicjalizacja
+  setPandaPosition(pos.x, pos.y);
+  chooseNewTarget();
+  updateDirection();
+  startWalkingAnimation();
+  animate();
+</script>
+</body>
+</html>
