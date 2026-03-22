@@ -1,50 +1,72 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8" />
-<title>Strona tekstowa</title>
-<style>
-  #textArea {
-    width: 80%;
-    height: 200px;
-    font-size: 16px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    resize: vertical;
-  }
-  button {
-    margin: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
-  }
-</style>
+    <meta charset="UTF-8">
+    <title>Niebieskoiksofikusnie - Edytowalne pole</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #textArea {
+            width: 80%;
+            height: 200px;
+            font-size: 16px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            resize: vertical;
+            margin-bottom: 10px; /* Dodaj margines poniżej pola tekstowego */
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        .return-link { /* Styl dla linku powrotnego */
+            display: block; /* Sprawia, że link jest na własnej linii */
+            margin-top: 20px; /* Odstęp od przycisków */
+            font-size: 18px;
+        }
+        a {
+            color: blue;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-<h2>Strona tekstowa</h2>
-<textarea id="textArea" readonly>strona tekstowa ucze sie</textarea>
-<br/>
-<button id="editBtn">Edytuj</button>
-<button id="saveBtn" disabled>Zapisz</button>
+    <h2>Niebieskoiksofikusnie - Edytowalne pole</h2>
+    <textarea id="textArea" readonly>strona tekstowa ucze sie</textarea>
+    <br/>
+    <button id="editBtn">Edytuj</button>
+    <button id="saveBtn" disabled>Zapisz</button>
 
-<script>
-  const textArea = document.getElementById('textArea');
-  const editBtn = document.getElementById('editBtn');
-  const saveBtn = document.getElementById('saveBtn');
+    <br/>
 
-  editBtn.addEventListener('click', () => {
-    textArea.removeAttribute('readonly');
-    textArea.focus();
-    saveBtn.disabled = false;
-    editBtn.disabled = true;
-  });
+    <a href="index.html" class="return-link">Wróć do strony głównej</a>
 
-  saveBtn.addEventListener('click', () => {
-    // Tu w przyszłości będzie kod do zapisu na backendzie
-    alert('Funkcja zapisu jeszcze nie jest dostępna.');
-    textArea.setAttribute('readonly', true);
-    saveBtn.disabled = true;
-    editBtn.disabled = false;
-  });
-</script>
+    <script>
+      const textArea = document.getElementById('textArea');
+      const editBtn = document.getElementById('editBtn');
+      const saveBtn = document.getElementById('saveBtn');
+
+      editBtn.addEventListener('click', () => {
+        textArea.removeAttribute('readonly');
+        textArea.focus();
+        saveBtn.disabled = false;
+        editBtn.disabled = true;
+      });
+
+      saveBtn.addEventListener('click', () => {
+        // Tu w przyszłości będzie kod do zapisu na backendzie
+        alert('Funkcja zapisu jeszcze nie jest dostępna.');
+        textArea.setAttribute('readonly', true);
+        saveBtn.disabled = true;
+        editBtn.disabled = false;
+      });
+    </script>
 </body>
 </html>
